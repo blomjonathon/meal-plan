@@ -75,12 +75,16 @@ class SimpleMealPlanner {
             });
         });
 
-        // Delegate event listener for delete buttons
+        // Delegate event listener for delete and edit buttons
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('delete-meal-btn')) {
                 const mealId = e.target.dataset.mealId;
                 const mealName = e.target.dataset.mealName;
                 this.deleteMeal(mealId, mealName);
+            }
+            if (e.target.classList.contains('edit-ingredients-btn')) {
+                const mealId = e.target.dataset.mealId;
+                this.editMealIngredients(mealId);
             }
         });
     }
@@ -115,11 +119,123 @@ class SimpleMealPlanner {
         alert('Meal added successfully!');
     }
 
+    editMealIngredients(mealId) {
+        const meal = this.meals.find(m => m.id == mealId);
+        if (!meal) return;
+
+        const mealItem = document.querySelector(`[data-meal-id="${mealId}"]`);
+        const ingredientsList = mealItem.querySelector('.meal-ingredients ul');
+        const currentHTML = ingredientsList.innerHTML;
+        
+        // Create editable ingredient lines
+        let editableHTML = meal.ingredients.map((ingredient, index) => `
+            <li class="ingredient-line">
+                <input type="text" class="ingredient-input" value="${ingredient}" data-index="${index}">
+                <button class="remove-ingredient-btn" data-index="${index}">×</button>
+            </li>
+        `).join('');
+        
+        // Add a new empty ingredient line
+        editableHTML += `
+            <li class="ingredient-line">
+                <input type="text" class="ingredient-input new-ingredient" placeholder="Add new ingredient...">
+                <button class="remove-ingredient-btn" style="visibility: hidden;">×</button>
+            </li>
+        `;
+        
+        // Replace ingredients list with editable inputs
+        ingredientsList.innerHTML = editableHTML;
+        
+        // Add save/cancel buttons below the list
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'edit-actions';
+        actionsDiv.innerHTML = `
+            <button class="btn btn-primary save-ingredients-btn">Save</button>
+            <button class="btn btn-secondary cancel-edit-btn">Cancel</button>
+        `;
+        
+        ingredientsList.parentNode.appendChild(actionsDiv);
+        
+        // Focus on first input
+        const firstInput = ingredientsList.querySelector('.ingredient-input');
+        firstInput.focus();
+        
+        // Add event listeners
+        const saveBtn = actionsDiv.querySelector('.save-ingredients-btn');
+        const cancelBtn = actionsDiv.querySelector('.cancel-edit-btn');
+        
+        // Handle ingredient input changes
+        ingredientsList.addEventListener('input', (e) => {
+            if (e.target.classList.contains('ingredient-input')) {
+                // Auto-add new line if typing in the last input
+                const inputs = ingredientsList.querySelectorAll('.ingredient-input');
+                const lastInput = inputs[inputs.length - 1];
+                
+                if (e.target === lastInput && e.target.value.trim() !== '') {
+                    const newLine = document.createElement('li');
+                    newLine.className = 'ingredient-line';
+                    newLine.innerHTML = `
+                        <input type="text" class="ingredient-input new-ingredient" placeholder="Add new ingredient...">
+                        <button class="remove-ingredient-btn" style="visibility: hidden;">×</button>
+                    `;
+                    ingredientsList.appendChild(newLine);
+                }
+            }
+        });
+        
+        // Handle remove ingredient buttons
+        ingredientsList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-ingredient-btn')) {
+                const line = e.target.closest('.ingredient-line');
+                if (line) {
+                    line.remove();
+                }
+            }
+        });
+        
+        saveBtn.addEventListener('click', () => {
+            const inputs = ingredientsList.querySelectorAll('.ingredient-input');
+            const newIngredients = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(ingredient => ingredient.length > 0);
+            
+            if (newIngredients.length === 0) {
+                alert('Ingredients cannot be empty!');
+                return;
+            }
+            
+            meal.ingredients = newIngredients;
+            this.saveData();
+            this.renderMeals();
+            this.renderWeeklyPlan();
+        });
+        
+        cancelBtn.addEventListener('click', () => {
+            // Restore original ingredients display
+            ingredientsList.innerHTML = currentHTML;
+            actionsDiv.remove();
+        });
+        
+        // Handle Enter key to save, Escape to cancel
+        ingredientsList.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                saveBtn.click();
+            } else if (e.key === 'Escape') {
+                cancelBtn.click();
+            }
+        });
+    }
+
     updateWeeklyPlan(day, mealName) {
         if (mealName) {
             this.weeklyPlan[day] = mealName;
+            const meal = this.meals.find(m => m.name === mealName);
+            if (meal) {
+                this.displayDayIngredients(day, meal);
+            }
         } else {
             delete this.weeklyPlan[day];
+            this.clearDayIngredients(day);
         }
         this.saveData();
     }
@@ -173,7 +289,6 @@ class SimpleMealPlanner {
             </ul>
             <div class="shopping-actions">
                 <button class="btn btn-secondary" id="clearChecked">Clear Checked Items</button>
-                <button class="btn btn-primary" id="printList">Print List</button>
             </div>
         `;
         shoppingListDiv.innerHTML = listHTML;
@@ -201,13 +316,7 @@ class SimpleMealPlanner {
             });
         }
 
-        // Print list button
-        const printListBtn = document.getElementById('printList');
-        if (printListBtn) {
-            printListBtn.addEventListener('click', () => {
-                this.printShoppingList();
-            });
-        }
+
     }
 
     updateShoppingItemState(checkbox) {
@@ -281,60 +390,7 @@ class SimpleMealPlanner {
         }
     }
 
-    printShoppingList() {
-        const uncheckedItems = document.querySelectorAll('.shopping-checkbox:not(:checked)');
-        if (uncheckedItems.length === 0) {
-            alert('All items are checked! Nothing to print.');
-            return;
-        }
 
-        const printWindow = window.open('', '_blank');
-        const items = Array.from(uncheckedItems).map(checkbox => {
-            const label = checkbox.nextElementSibling;
-            return label.textContent;
-        });
-
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Shopping List</title>
-                    <style>
-                        body { 
-                            font-family: Arial, sans-serif; 
-                            padding: 20px; 
-                            font-size: 16px;
-                        }
-                        h1 { 
-                            color: #4CAF50; 
-                            border-bottom: 2px solid #4CAF50;
-                            padding-bottom: 10px;
-                        }
-                        .item { 
-                            padding: 8px 0; 
-                            border-bottom: 1px solid #eee; 
-                            font-size: 18px;
-                        }
-                        .date {
-                            color: #666;
-                            margin-bottom: 20px;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>Shopping List</h1>
-                    <div class="date">Generated on ${new Date().toLocaleDateString()}</div>
-                    ${items.map(item => `
-                        <div class="item">
-                            <input type="checkbox" style="transform: scale(1.5); margin-right: 10px;"> ${item}
-                        </div>
-                    `).join('')}
-                </body>
-            </html>
-        `);
-        
-        printWindow.document.close();
-        printWindow.print();
-    }
 
     renderMeals() {
         const mealsListDiv = document.getElementById('mealsList');
@@ -345,7 +401,7 @@ class SimpleMealPlanner {
         }
 
         const mealsHTML = this.meals.map(meal => `
-            <div class="meal-item">
+            <div class="meal-item" data-meal-id="${meal.id}">
                 <h3>${meal.name}</h3>
                 <div class="meal-ingredients">
                     <strong>Ingredients:</strong>
@@ -353,10 +409,7 @@ class SimpleMealPlanner {
                         ${meal.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
                     </ul>
                 </div>
-                ${meal.instructions ? `<p><strong>Instructions:</strong> ${meal.instructions}</p>` : ''}
-                ${meal.prepTime ? `<p><strong>Prep Time:</strong> ${meal.prepTime} minutes</p>` : ''}
-                ${meal.servings ? `<p><strong>Servings:</strong> ${meal.servings}</p>` : ''}
-                ${meal.category ? `<p><strong>Category:</strong> ${meal.category}</p>` : ''}
+                <button class="edit-ingredients-btn" data-meal-id="${meal.id}">Edit Ingredients</button>
                 <button class="delete-meal-btn" data-meal-id="${meal.id}" data-meal-name="${meal.name}">Delete Meal</button>
             </div>
         `).join('');
@@ -382,6 +435,51 @@ class SimpleMealPlanner {
                 select.appendChild(option);
             });
         });
+
+        // Update ingredients display for each day
+        Object.keys(this.weeklyPlan).forEach(day => {
+            const mealName = this.weeklyPlan[day];
+            if (mealName) {
+                const meal = this.meals.find(m => m.name === mealName);
+                if (meal) {
+                    this.displayDayIngredients(day, meal);
+                }
+            } else {
+                this.clearDayIngredients(day);
+            }
+        });
+    }
+
+    displayDayIngredients(day, meal) {
+        const dayColumn = document.querySelector(`[data-day="${day}"]`).closest('.day-column');
+        let ingredientsDiv = dayColumn.querySelector('.day-ingredients');
+        
+        // Create ingredients display if it doesn't exist
+        if (!ingredientsDiv) {
+            ingredientsDiv = document.createElement('div');
+            ingredientsDiv.className = 'day-ingredients';
+            dayColumn.appendChild(ingredientsDiv);
+        }
+        
+        ingredientsDiv.innerHTML = `
+            <div class="selected-meal-info">
+                <h4>${meal.name}</h4>
+                <div class="ingredients-preview">
+                    <strong>Ingredients:</strong>
+                    <ul>
+                        ${meal.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    clearDayIngredients(day) {
+        const dayColumn = document.querySelector(`[data-day="${day}"]`).closest('.day-column');
+        const ingredientsDiv = dayColumn.querySelector('.day-ingredients');
+        if (ingredientsDiv) {
+            ingredientsDiv.remove();
+        }
     }
 
     deleteMeal(mealId, mealName) {

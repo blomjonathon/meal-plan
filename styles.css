@@ -78,21 +78,64 @@ body {
 }
 
 .week-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+    margin-top: 1rem;
 }
 
 .day-column {
-    background: #f9f9f9;
-    padding: 1rem;
+    background: white;
+    border: 1px solid #ddd;
     border-radius: 8px;
-    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .day-column h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.1rem;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4CAF50;
+}
+
+.day-ingredients {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.selected-meal-info h4 {
+    margin: 0 0 0.75rem 0;
     color: #4CAF50;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.ingredients-preview {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+
+.ingredients-preview strong {
+    color: #555;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.ingredients-preview ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.ingredients-preview li {
+    color: #666;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
 }
 
 .meal-select {
@@ -271,6 +314,106 @@ body {
 }
 
 .delete-meal-btn:hover {
+    background: #d32f2f;
+}
+
+.edit-ingredients-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.edit-ingredients-btn:hover {
+    background: #1976D2;
+}
+
+.ingredients-edit-form {
+    margin-top: 1rem;
+}
+
+.ingredients-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    resize: vertical;
+    margin: 0.5rem 0;
+    transition: border-color 0.3s ease;
+}
+
+.ingredients-textarea:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.edit-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.edit-actions .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.ingredient-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ingredient-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease;
+}
+
+.ingredient-input:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+.ingredient-input.new-ingredient {
+    border-style: dashed;
+    color: #666;
+}
+
+.remove-ingredient-btn {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.remove-ingredient-btn:hover {
     background: #d32f2f;
 }
 

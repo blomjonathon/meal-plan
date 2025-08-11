@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
+const fsSync = require('fs');
 const cors = require('cors');
 
 const app = express();
@@ -161,6 +162,24 @@ app.delete('/api/meals/:weekKey/:day/:meal', async (req, res) => {
     } catch (error) {
         console.error('Error deleting meal:', error);
         res.status(500).json({ error: 'Failed to delete meal' });
+    }
+});
+
+// Get all meals (for dropdown population)
+app.get('/api/meals', (req, res) => {
+    try {
+        // Return all meals from the meals.json file
+        const mealsFilePath = path.join(__dirname, 'data', 'meals.json');
+        if (fsSync.existsSync(mealsFilePath)) {
+            const mealsData = fsSync.readFileSync(mealsFilePath, 'utf8');
+            const allMeals = JSON.parse(mealsData);
+            res.json(allMeals);
+        } else {
+            res.json([]);
+        }
+    } catch (error) {
+        console.error('Error fetching meals:', error);
+        res.status(500).json({ error: 'Failed to fetch meals' });
     }
 });
 

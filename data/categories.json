@@ -1,0 +1,37 @@
+[
+  {
+    "id": "italian",
+    "name": "Italian",
+    "color": "#FF6B6B"
+  },
+  {
+    "id": "american",
+    "name": "American",
+    "color": "#4ECDC4"
+  },
+  {
+    "id": "mexican",
+    "name": "Mexican",
+    "color": "#45B7D1"
+  },
+  {
+    "id": "asian",
+    "name": "Asian",
+    "color": "#96CEB4"
+  },
+  {
+    "id": "salad",
+    "name": "Salad",
+    "color": "#FFEAA7"
+  },
+  {
+    "id": "seafood",
+    "name": "Seafood",
+    "color": "#DDA0DD"
+  },
+  {
+    "id": "indian",
+    "name": "Indian",
+    "color": "#FF8C42"
+  }
+] 

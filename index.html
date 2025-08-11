@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Meal Planner</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1><i class="fas fa-utensils"></i> Simple Meal Planner</h1>
+        </header>
+
+        <main class="main-content">
+            <!-- Add New Meal Section -->
+            <div class="add-meal-section">
+                <h2>Add New Meal</h2>
+                <form id="addMealForm">
+                    <div class="form-row">
+                        <input type="text" id="mealName" placeholder="Meal name" required>
+                        <textarea id="mealIngredients" placeholder="Ingredients (one per line)" rows="3" required></textarea>
+                        <button type="submit" class="btn btn-primary">Add Meal</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Weekly Planner -->
+            <div class="weekly-planner">
+                <h2>This Week's Plan</h2>
+                <div class="week-grid">
+                    <div class="day-column">
+                        <h3>Monday</h3>
+                        <div class="meal-slot" data-day="monday">
+                            <select class="meal-select" data-day="monday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Tuesday</h3>
+                        <div class="meal-slot" data-day="tuesday">
+                            <select class="meal-select" data-day="tuesday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Wednesday</h3>
+                        <div class="meal-slot" data-day="wednesday">
+                            <select class="meal-select" data-day="wednesday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Thursday</h3>
+                        <div class="meal-slot" data-day="thursday">
+                            <select class="meal-select" data-day="thursday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Friday</h3>
+                        <div class="meal-slot" data-day="friday">
+                            <select class="meal-select" data-day="friday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Saturday</h3>
+                        <div class="meal-slot" data-day="saturday">
+                            <select class="meal-select" data-day="saturday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="day-column">
+                        <h3>Sunday</h3>
+                        <div class="meal-slot" data-day="sunday">
+                            <select class="meal-select" data-day="sunday">
+                                <option value="">Select a meal</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shopping List -->
+            <div class="shopping-list-section">
+                <h2>Shopping List</h2>
+                <button id="generateShoppingList" class="btn btn-success">Generate Shopping List</button>
+                <div id="shoppingList" class="shopping-list"></div>
+            </div>
+
+            <!-- All Meals List -->
+            <div class="meals-list-section">
+                <h2>All My Meals</h2>
+                <div id="mealsList" class="meals-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

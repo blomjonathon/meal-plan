@@ -1,0 +1,216 @@
+/* Simple Meal Planner Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #f5f5f5;
+}
+
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    background: #4CAF50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Main Content */
+.main-content {
+    padding: 2rem;
+}
+
+.main-content h2 {
+    color: #333;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4CAF50;
+}
+
+/* Add Meal Section */
+.add-meal-section {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row input,
+.form-row textarea {
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+/* Weekly Planner */
+.weekly-planner {
+    margin-bottom: 2rem;
+}
+
+.week-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.day-column {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.day-column h3 {
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.meal-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+/* Shopping List */
+.shopping-list-section {
+    margin-bottom: 2rem;
+}
+
+.shopping-list {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    min-height: 100px;
+}
+
+.shopping-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.shopping-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.shopping-list li:last-child {
+    border-bottom: none;
+}
+
+/* Meals List */
+.meals-list {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    min-height: 200px;
+}
+
+.meal-item {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid #4CAF50;
+}
+
+.meal-item h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.meal-ingredients {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.meal-ingredients ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+}
+
+.meal-ingredients li {
+    padding: 0.25rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.meal-ingredients li:last-child {
+    border-bottom: none;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #1976D2;
+}
+
+.btn-success {
+    background: #4CAF50;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .week-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        gap: 0.75rem;
+    }
+} 

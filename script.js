@@ -229,9 +229,13 @@ class SimpleMealPlanner {
     updateWeeklyPlan(day, mealName) {
         if (mealName) {
             this.weeklyPlan[day] = mealName;
-            const meal = this.meals.find(m => m.name === mealName);
-            if (meal) {
-                this.displayDayIngredients(day, meal);
+            if (mealName === 'taken-care-of') {
+                this.displayTakenCareOf(day);
+            } else {
+                const meal = this.meals.find(m => m.name === mealName);
+                if (meal) {
+                    this.displayDayIngredients(day, meal);
+                }
             }
         } else {
             delete this.weeklyPlan[day];
@@ -246,6 +250,11 @@ class SimpleMealPlanner {
 
         // Count ingredients from weekly plan
         Object.values(this.weeklyPlan).forEach(mealName => {
+            // Skip "taken care of" meals
+            if (mealName === 'taken-care-of') {
+                return;
+            }
+            
             const meal = this.meals.find(m => m.name === mealName);
             if (meal) {
                 meal.ingredients.forEach(ingredient => {
@@ -426,6 +435,12 @@ class SimpleMealPlanner {
             // Clear existing options except the first one
             select.innerHTML = '<option value="">Select a meal</option>';
             
+            // Add "Taken Care Of" option
+            const takenCareOption = document.createElement('option');
+            takenCareOption.value = 'taken-care-of';
+            takenCareOption.textContent = '✓ Taken Care Of';
+            select.appendChild(takenCareOption);
+            
             // Add meal options
             this.meals.forEach(meal => {
                 const option = document.createElement('option');
@@ -469,6 +484,28 @@ class SimpleMealPlanner {
                     <ul>
                         ${meal.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
                     </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    displayTakenCareOf(day) {
+        const dayColumn = document.querySelector(`[data-day="${day}"]`).closest('.day-column');
+        let ingredientsDiv = dayColumn.querySelector('.day-ingredients');
+        
+        // Create ingredients display if it doesn't exist
+        if (!ingredientsDiv) {
+            ingredientsDiv = document.createElement('div');
+            ingredientsDiv.className = 'day-ingredients';
+            dayColumn.appendChild(ingredientsDiv);
+        }
+        
+        ingredientsDiv.innerHTML = `
+            <div class="selected-meal-info">
+                <h4 style="color: #28a745; font-style: italic;">✓ Taken Care Of</h4>
+                <div class="ingredients-preview" style="background: #d4edda; border: 1px solid #c3e6cb;">
+                    <strong style="color: #155724;">Status:</strong>
+                    <p style="color: #155724; margin: 0.5rem 0 0 0; font-style: italic;">No ingredients needed - meal is taken care of!</p>
                 </div>
             </div>
         `;

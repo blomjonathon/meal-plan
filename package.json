@@ -19,8 +19,8 @@
   "author": "MealPan Team",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
@@ -36,4 +36,4 @@
     "url": "https://github.com/yourusername/mealpan/issues"
   },
   "homepage": "https://github.com/yourusername/mealpan#readme"
-} 
+}

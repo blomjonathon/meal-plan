@@ -1,0 +1,32 @@
+{
+  "meals": [
+    {
+      "name": "Pizza",
+      "ingredients": [
+        "dough",
+        "tomato sauce",
+        "cheese",
+        "pepperoni"
+      ]
+    },
+    {
+      "name": "Burgers",
+      "ingredients": [
+        "burger patty",
+        "bun",
+        "lettuce",
+        "tomato",
+        "cheese"
+      ]
+    },
+    {
+      "name": "Pasta",
+      "ingredients": [
+        "pasta noodles",
+        "tomato sauce",
+        "olive oil",
+        "parmesan cheese"
+      ]
+    }
+  ]
+}

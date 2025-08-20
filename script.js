@@ -544,3 +544,4 @@ class SimpleMealPlanner {
 document.addEventListener('DOMContentLoaded', () => {
     new SimpleMealPlanner();
 }); 
+
